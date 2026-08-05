@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Blueprint, redirect, session
+from flask import Blueprint, redirect, render_template, session
 
 from database import db
 from models.disciplina import Disciplina
@@ -62,3 +62,31 @@ def remover_falta(disciplina_id):
         db.session.commit()
 
     return redirect("/dashboard")
+
+
+@faltas.route("/disciplinas/<int:disciplina_id>/faltas")
+def historico_faltas(disciplina_id):
+
+    if "usuario_id" not in session:
+        return redirect("/login")
+
+    disciplina = Disciplina.query.filter_by(
+        id=disciplina_id,
+        usuario_id=session["usuario_id"]
+    ).first_or_404()
+
+    registros = (
+        Falta.query
+        .filter_by(disciplina_id=disciplina.id)
+        .order_by(Falta.data.desc(), Falta.id.desc())
+        .all()
+    )
+
+    total_faltas = sum(registro.quantidade for registro in registros)
+
+    return render_template(
+        "historico_faltas.html",
+        disciplina=disciplina,
+        registros=registros,
+        total_faltas=total_faltas
+    )

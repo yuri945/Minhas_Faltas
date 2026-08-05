@@ -6,8 +6,18 @@ class Falta(db.Model):
     __tablename__ = "faltas"
 
     id = db.Column(db.Integer, primary_key=True)
-    data = db.Column(db.Date, nullable=False, default=datetime.utcnow)
-    quantidade = db.Column(db.Integer, nullable=False, default=1)
+
+    data = db.Column(
+        db.Date,
+        nullable=False,
+        default=datetime.utcnow
+    )
+
+    quantidade = db.Column(
+        db.Integer,
+        nullable=False,
+        default=1
+    )
 
     disciplina_id = db.Column(
         db.Integer,
@@ -17,7 +27,10 @@ class Falta(db.Model):
 
     disciplina = db.relationship(
         "Disciplina",
-        backref="faltas"
+        backref=db.backref(
+            "faltas",
+            cascade="all, delete-orphan"
+        )
     )
 
     def __repr__(self):

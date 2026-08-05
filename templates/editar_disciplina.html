@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Editar disciplina</title>
+</head>
+
+<body>
+
+    <h1>Editar disciplina</h1>
+
+    <form method="POST">
+
+        <label for="nome">Nome da disciplina</label><br>
+
+        <input
+            type="text"
+            id="nome"
+            name="nome"
+            value="{{ disciplina.nome }}"
+            required
+        >
+
+        <br><br>
+
+        <label for="professor">Professor</label><br>
+
+        <input
+            type="text"
+            id="professor"
+            name="professor"
+            value="{{ disciplina.professor or '' }}"
+        >
+
+        <br><br>
+
+        <label for="dias_semana">Dias da semana</label><br>
+
+        <input
+            type="text"
+            id="dias_semana"
+            name="dias_semana"
+            value="{{ disciplina.dias_semana }}"
+            required
+        >
+
+        <br><br>
+
+        <label for="limite_faltas">Limite de faltas</label><br>
+
+        <input
+            type="number"
+            id="limite_faltas"
+            name="limite_faltas"
+            value="{{ disciplina.limite_faltas }}"
+            min="1"
+            required
+        >
+
+        <br><br>
+
+        <button type="submit">
+            Salvar alterações
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="/dashboard">Cancelar</a>
+
+</body>
+
+</html>
