@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block titulo %}
+            Minhas Faltas
+        {% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    {% block head %}
+    {% endblock %}
+</head>
+
+<body>
+
+    {% block cabecalho %}
+
+        <header class="cabecalho-principal">
+
+            <nav class="menu-principal">
+
+                <a
+                    class="marca"
+                    href="{{ url_for('home') }}"
+                >
+                    Minhas Faltas
+                </a>
+
+                <div class="menu-links">
+
+                    {% if session.get("usuario_id") %}
+
+                        <a href="{{ url_for('dashboard') }}">
+                            Dashboard
+                        </a>
+
+                        <a href="{{ url_for('disciplinas.nova_disciplina') }}">
+                            Nova disciplina
+                        </a>
+
+                        <a href="{{ url_for('auth.alterar_senha') }}">
+                            Alterar senha
+                        </a>
+
+                        <a href="{{ url_for('auth.logout') }}">
+                            Sair
+                        </a>
+
+                    {% else %}
+
+                        <a href="{{ url_for('auth.login') }}">
+                            Entrar
+                        </a>
+
+                        <a href="{{ url_for('auth.cadastro') }}">
+                            Criar conta
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            </nav>
+
+        </header>
+
+    {% endblock %}
+
+    <main>
+
+        {% with mensagens = get_flashed_messages(with_categories=true) %}
+
+            {% if mensagens %}
+
+                <section class="mensagens">
+
+                    {% for categoria, mensagem in mensagens %}
+
+                        <p class="mensagem {{ categoria }}">
+                            {{ mensagem }}
+                        </p>
+
+                    {% endfor %}
+
+                </section>
+
+            {% endif %}
+
+        {% endwith %}
+
+        {% block conteudo %}
+        {% endblock %}
+
+    </main>
+
+    {% block rodape %}
+
+        <footer class="rodape-principal">
+
+            <p>
+                Minhas Faltas
+            </p>
+
+        </footer>
+
+    {% endblock %}
+
+    {% block scripts %}
+    {% endblock %}
+
+</body>
+
+</html>
