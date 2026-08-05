@@ -28,6 +28,12 @@
 
     <form method="POST" action="/alterar-senha">
 
+        <input
+            type="hidden"
+            name="csrf_token"
+            value="{{ csrf_token() }}"
+        >
+
         <div>
             <label for="senha_atual">
                 Senha atual

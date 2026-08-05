@@ -1,10 +1,18 @@
 from datetime import datetime
 
-from flask import Blueprint, redirect, render_template, session
+from flask import (
+    Blueprint,
+    redirect,
+    render_template,
+    session,
+    flash
+)
 
 from database import db
+from decorators import login_required
 from models.disciplina import Disciplina
 from models.falta import Falta
+from services.database_service import salvar_alteracoes
 
 
 faltas = Blueprint("faltas", __name__)
@@ -14,10 +22,8 @@ faltas = Blueprint("faltas", __name__)
     "/disciplinas/<int:disciplina_id>/faltas/adicionar",
     methods=["POST"]
 )
+@login_required
 def adicionar_falta(disciplina_id):
-
-    if "usuario_id" not in session:
-        return redirect("/login")
 
     disciplina = Disciplina.query.filter_by(
         id=disciplina_id,
@@ -31,7 +37,18 @@ def adicionar_falta(disciplina_id):
     )
 
     db.session.add(nova_falta)
-    db.session.commit()
+
+    if not salvar_alteracoes():
+        flash(
+            "Não foi possível adicionar a falta.",
+            "erro"
+        )
+        return redirect("/dashboard")
+
+    flash(
+        f"Falta adicionada em {disciplina.nome}.",
+        "sucesso"
+    )
 
     return redirect("/dashboard")
 
@@ -40,10 +57,8 @@ def adicionar_falta(disciplina_id):
     "/disciplinas/<int:disciplina_id>/faltas/remover",
     methods=["POST"]
 )
+@login_required
 def remover_falta(disciplina_id):
-
-    if "usuario_id" not in session:
-        return redirect("/login")
 
     disciplina = Disciplina.query.filter_by(
         id=disciplina_id,
@@ -57,18 +72,35 @@ def remover_falta(disciplina_id):
         .first()
     )
 
-    if ultima_falta:
-        db.session.delete(ultima_falta)
-        db.session.commit()
+    if not ultima_falta:
+        flash(
+            "Essa disciplina não possui faltas para remover.",
+            "erro"
+        )
+        return redirect("/dashboard")
+
+    db.session.delete(ultima_falta)
+
+    if not salvar_alteracoes():
+        flash(
+            "Não foi possível remover a falta.",
+            "erro"
+        )
+        return redirect("/dashboard")
+
+    flash(
+        f"Última falta removida de {disciplina.nome}.",
+        "sucesso"
+    )
 
     return redirect("/dashboard")
 
 
-@faltas.route("/disciplinas/<int:disciplina_id>/faltas")
+@faltas.route(
+    "/disciplinas/<int:disciplina_id>/faltas"
+)
+@login_required
 def historico_faltas(disciplina_id):
-
-    if "usuario_id" not in session:
-        return redirect("/login")
 
     disciplina = Disciplina.query.filter_by(
         id=disciplina_id,
@@ -78,11 +110,17 @@ def historico_faltas(disciplina_id):
     registros = (
         Falta.query
         .filter_by(disciplina_id=disciplina.id)
-        .order_by(Falta.data.desc(), Falta.id.desc())
+        .order_by(
+            Falta.data.desc(),
+            Falta.id.desc()
+        )
         .all()
     )
 
-    total_faltas = sum(registro.quantidade for registro in registros)
+    total_faltas = sum(
+        registro.quantidade
+        for registro in registros
+    )
 
     return render_template(
         "historico_faltas.html",

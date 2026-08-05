@@ -13,7 +13,9 @@ from werkzeug.security import (
 )
 
 from database import db
+from decorators import login_required
 from models.usuario import Usuario
+from services.database_service import salvar_alteracoes
 
 
 auth = Blueprint("auth", __name__)
@@ -66,14 +68,24 @@ def cadastro():
         )
 
         db.session.add(novo_usuario)
-        db.session.commit()
+
+        if not salvar_alteracoes():
+            flash(
+                "Não foi possível concluir o cadastro. Tente novamente.",
+                "erro"
+            )
+            return redirect("/cadastro")
+
+        session.clear()
+        session["usuario_id"] = novo_usuario.id
+        session["usuario_nome"] = novo_usuario.nome
 
         flash(
             "Cadastro realizado com sucesso.",
             "sucesso"
         )
 
-        return redirect("/login")
+        return redirect("/dashboard")
 
     return render_template("cadastro.html")
 
@@ -110,7 +122,6 @@ def login():
             return redirect("/login")
 
         session.clear()
-
         session["usuario_id"] = usuario.id
         session["usuario_nome"] = usuario.nome
 
@@ -125,14 +136,8 @@ def login():
 
 
 @auth.route("/alterar-senha", methods=["GET", "POST"])
+@login_required
 def alterar_senha():
-
-    if "usuario_id" not in session:
-        flash(
-            "Faça login para continuar.",
-            "erro"
-        )
-        return redirect("/login")
 
     usuario = Usuario.query.get_or_404(
         session["usuario_id"]
@@ -199,7 +204,12 @@ def alterar_senha():
             nova_senha
         )
 
-        db.session.commit()
+        if not salvar_alteracoes():
+            flash(
+                "Não foi possível alterar a senha. Tente novamente.",
+                "erro"
+            )
+            return redirect("/alterar-senha")
 
         flash(
             "Senha alterada com sucesso.",
@@ -212,6 +222,7 @@ def alterar_senha():
 
 
 @auth.route("/logout")
+@login_required
 def logout():
 
     session.clear()
