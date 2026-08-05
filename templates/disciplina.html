@@ -22,6 +22,12 @@
 
     <form method="POST">
 
+        <input
+            type="hidden"
+            name="csrf_token"
+            value="{{ csrf_token() }}"
+        >
+
         <label>Nome da disciplina</label><br>
         <input type="text" name="nome" required><br><br>
 

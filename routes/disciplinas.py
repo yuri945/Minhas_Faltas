@@ -8,7 +8,9 @@ from flask import (
 )
 
 from database import db
+from decorators import login_required
 from models.disciplina import Disciplina
+from services.database_service import salvar_alteracoes
 
 
 disciplinas = Blueprint("disciplinas", __name__)
@@ -18,26 +20,33 @@ disciplinas = Blueprint("disciplinas", __name__)
     "/disciplinas/nova",
     methods=["GET", "POST"]
 )
+@login_required
 def nova_disciplina():
-
-    if "usuario_id" not in session:
-        flash("Faça login para continuar.", "erro")
-        return redirect("/login")
 
     if request.method == "POST":
         nome = request.form.get("nome", "").strip()
         professor = request.form.get("professor", "").strip()
         dias_semana = request.form.get("dias_semana", "").strip()
-        limite_faltas = request.form.get("limite_faltas", "").strip()
+        limite_faltas = request.form.get(
+            "limite_faltas",
+            ""
+        ).strip()
 
         if not nome or not dias_semana or not limite_faltas:
-            flash("Preencha todos os campos obrigatórios.", "erro")
+            flash(
+                "Preencha todos os campos obrigatórios.",
+                "erro"
+            )
             return redirect("/disciplinas/nova")
 
         try:
             limite_faltas = int(limite_faltas)
+
         except ValueError:
-            flash("O limite de faltas deve ser um número inteiro.", "erro")
+            flash(
+                "O limite de faltas deve ser um número inteiro.",
+                "erro"
+            )
             return redirect("/disciplinas/nova")
 
         if limite_faltas <= 0:
@@ -56,9 +65,19 @@ def nova_disciplina():
         )
 
         db.session.add(nova)
-        db.session.commit()
 
-        flash("Disciplina cadastrada com sucesso.", "sucesso")
+        if not salvar_alteracoes():
+            flash(
+                "Não foi possível cadastrar a disciplina.",
+                "erro"
+            )
+            return redirect("/disciplinas/nova")
+
+        flash(
+            "Disciplina cadastrada com sucesso.",
+            "sucesso"
+        )
+
         return redirect("/dashboard")
 
     return render_template("disciplina.html")
@@ -68,11 +87,8 @@ def nova_disciplina():
     "/disciplinas/<int:disciplina_id>/editar",
     methods=["GET", "POST"]
 )
+@login_required
 def editar_disciplina(disciplina_id):
-
-    if "usuario_id" not in session:
-        flash("Faça login para continuar.", "erro")
-        return redirect("/login")
 
     disciplina = Disciplina.query.filter_by(
         id=disciplina_id,
@@ -83,18 +99,28 @@ def editar_disciplina(disciplina_id):
         nome = request.form.get("nome", "").strip()
         professor = request.form.get("professor", "").strip()
         dias_semana = request.form.get("dias_semana", "").strip()
-        limite_faltas = request.form.get("limite_faltas", "").strip()
+        limite_faltas = request.form.get(
+            "limite_faltas",
+            ""
+        ).strip()
 
         if not nome or not dias_semana or not limite_faltas:
-            flash("Preencha todos os campos obrigatórios.", "erro")
+            flash(
+                "Preencha todos os campos obrigatórios.",
+                "erro"
+            )
             return redirect(
                 f"/disciplinas/{disciplina.id}/editar"
             )
 
         try:
             limite_faltas = int(limite_faltas)
+
         except ValueError:
-            flash("O limite de faltas deve ser um número inteiro.", "erro")
+            flash(
+                "O limite de faltas deve ser um número inteiro.",
+                "erro"
+            )
             return redirect(
                 f"/disciplinas/{disciplina.id}/editar"
             )
@@ -113,9 +139,20 @@ def editar_disciplina(disciplina_id):
         disciplina.dias_semana = dias_semana
         disciplina.limite_faltas = limite_faltas
 
-        db.session.commit()
+        if not salvar_alteracoes():
+            flash(
+                "Não foi possível atualizar a disciplina.",
+                "erro"
+            )
+            return redirect(
+                f"/disciplinas/{disciplina.id}/editar"
+            )
 
-        flash("Disciplina atualizada com sucesso.", "sucesso")
+        flash(
+            "Disciplina atualizada com sucesso.",
+            "sucesso"
+        )
+
         return redirect("/dashboard")
 
     return render_template(
@@ -128,11 +165,8 @@ def editar_disciplina(disciplina_id):
     "/disciplinas/<int:disciplina_id>/excluir",
     methods=["POST"]
 )
+@login_required
 def excluir_disciplina(disciplina_id):
-
-    if "usuario_id" not in session:
-        flash("Faça login para continuar.", "erro")
-        return redirect("/login")
 
     disciplina = Disciplina.query.filter_by(
         id=disciplina_id,
@@ -140,7 +174,17 @@ def excluir_disciplina(disciplina_id):
     ).first_or_404()
 
     db.session.delete(disciplina)
-    db.session.commit()
 
-    flash("Disciplina excluída com sucesso.", "sucesso")
+    if not salvar_alteracoes():
+        flash(
+            "Não foi possível excluir a disciplina.",
+            "erro"
+        )
+        return redirect("/dashboard")
+
+    flash(
+        "Disciplina excluída com sucesso.",
+        "sucesso"
+    )
+
     return redirect("/dashboard")
