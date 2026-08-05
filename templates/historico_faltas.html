@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Histórico de faltas</title>
+</head>
+
+<body>
+
+    <h1>Histórico de faltas</h1>
+
+    <h2>{{ disciplina.nome }}</h2>
+
+    <p>
+        Total:
+        {{ total_faltas }}/{{ disciplina.limite_faltas }}
+    </p>
+
+    <hr>
+
+    {% if registros %}
+
+        {% for falta in registros %}
+
+            <div>
+                <p>
+                    Data:
+                    {{ falta.data.strftime("%d/%m/%Y") }}
+                </p>
+
+                <p>
+                    Quantidade: {{ falta.quantidade }}
+                </p>
+            </div>
+
+            <hr>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>Nenhuma falta registrada nesta disciplina.</p>
+
+    {% endif %}
+
+    <a href="/dashboard">Voltar para a dashboard</a>
+
+</body>
+
+</html>
