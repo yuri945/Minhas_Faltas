@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+
+<body>
+
+    <h1>Bem-vindo, {{ usuario_nome }}!</h1>
+
+    <a href="/disciplinas/nova">Cadastrar disciplina</a>
+    <a href="/logout">Sair</a>
+
+    <hr>
+
+    {% if disciplinas %}
+
+        {% for item in disciplinas %}
+
+            <div>
+                <h2>{{ item.disciplina.nome }}</h2>
+
+                <p>
+                    Professor:
+                    {{ item.disciplina.professor or "Não informado" }}
+                </p>
+
+                <p>Dias: {{ item.disciplina.dias_semana }}</p>
+
+                <p>
+                    Faltas:
+                    {{ item.total_faltas }}/{{ item.disciplina.limite_faltas }}
+                </p>
+
+                <form
+                    method="POST"
+                    action="/disciplinas/{{ item.disciplina.id }}/faltas/adicionar"
+                >
+                    <button type="submit">Adicionar falta</button>
+                </form>
+
+                <br>
+
+                <form
+                    method="POST"
+                    action="/disciplinas/{{ item.disciplina.id }}/faltas/remover"
+                >
+                    <button type="submit">Remover última falta</button>
+                </form>
+            </div>
+
+            <hr>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>Nenhuma disciplina cadastrada.</p>
+
+    {% endif %}
+
+</body>
+
+</html>

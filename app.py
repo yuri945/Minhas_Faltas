@@ -1,33 +1,32 @@
-from flask import Flask, render_template, request, redirect
-from flask import Flask
+from flask import Flask, session, redirect, render_template
+from sqlalchemy import func
+
 from config import Config
 from database import db
 
-
-# Importa os modelos
 from models.usuario import Usuario
+from models.disciplina import Disciplina
+from models.falta import Falta
+
 from routes.auth import auth
+from routes.disciplinas import disciplinas
+from routes.faltas import faltas
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
-# Inicializa o banco de dados
 db.init_app(app)
 
 app.register_blueprint(auth)
+app.register_blueprint(disciplinas)
+app.register_blueprint(faltas)
+
 
 @app.route("/")
 def home():
     return "<h1>Controle de Faltas</h1>"
 
-# Cria as tabelas do banco
-with app.app_context():
-    db.create_all()
-
-if __name__ == "__main__":
-    app.run(debug=app.config["DEBUG"])
-
-from flask import session
 
 @app.route("/dashboard")
 def dashboard():
@@ -35,8 +34,37 @@ def dashboard():
     if "usuario_id" not in session:
         return redirect("/login")
 
-    return f"""
-    <h1>Bem-vindo, {session['usuario_nome']}!</h1>
+    disciplinas_usuario = Disciplina.query.filter_by(
+        usuario_id=session["usuario_id"]
+    ).all()
 
-    <p>Essa será sua página principal.</p>
-    """
+    disciplinas_com_faltas = []
+
+    for disciplina in disciplinas_usuario:
+
+        total_faltas = (
+            db.session.query(
+                func.coalesce(func.sum(Falta.quantidade), 0)
+            )
+            .filter(Falta.disciplina_id == disciplina.id)
+            .scalar()
+        )
+
+        disciplinas_com_faltas.append({
+            "disciplina": disciplina,
+            "total_faltas": total_faltas
+        })
+
+    return render_template(
+        "dashboard.html",
+        usuario_nome=session["usuario_nome"],
+        disciplinas=disciplinas_com_faltas
+    )
+
+
+with app.app_context():
+    db.create_all()
+
+
+if __name__ == "__main__":
+    app.run(debug=app.config["DEBUG"])
