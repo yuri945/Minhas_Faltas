@@ -1,89 +1,105 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+{% block titulo %}
+    Entrar
+{% endblock %}
 
-    <title>Login</title>
-</head>
+{% block cabecalho %}{% endblock %}
+{% block rodape %}{% endblock %}
 
-<body>
+{% block conteudo %}
 
-    {% with mensagens = get_flashed_messages(with_categories=true) %}
-        {% if mensagens %}
-            {% for categoria, mensagem in mensagens %}
-                <p class="{{ categoria }}">
-                    {{ mensagem }}
-                </p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+<section class="pagina-autenticacao">
 
-    <h1>Entrar</h1>
+    <div class="cartao-autenticacao">
 
-    <form method="POST" action="/login">
+        <div class="cabecalho-autenticacao">
 
-        <input
-            type="hidden"
-            name="csrf_token"
-            value="{{ csrf_token() }}"
+            <div class="logo-autenticacao">
+                <img
+                    src="{{ url_for('static', filename='assets/logo_minhasfaltas.svg') }}"
+                    alt="Logo Minhas Faltas"
+                >
+            </div>
+
+            <h1>Entrar na sua conta</h1>
+
+            <p>
+                Acesse suas disciplinas e acompanhe suas faltas.
+            </p>
+
+        </div>
+
+        <form
+            class="form-autenticacao"
+            method="POST"
+            action="{{ url_for('auth.login') }}"
         >
 
-        <div>
-            <label for="email">E-mail</label>
-
-            <br>
-
             <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Digite seu e-mail"
-                maxlength="120"
-                autocomplete="email"
-                required
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
             >
+
+            <div class="grupo-campo">
+
+                <label for="email">
+                    E-mail
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="exemplo@email.com"
+                    maxlength="120"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+            <div class="grupo-campo">
+
+                <label for="senha">
+                    Senha
+                </label>
+
+                <input
+                    type="password"
+                    id="senha"
+                    name="senha"
+                    placeholder="Digite sua senha"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+            <button
+                class="botao-principal"
+                type="submit"
+            >
+                Entrar
+            </button>
+
+        </form>
+
+        <div class="rodape-autenticacao">
+
+            <p>
+                Ainda não possui uma conta?
+
+                <a href="{{ url_for('auth.cadastro') }}">
+                    Cadastre-se
+                </a>
+            </p>
+
         </div>
 
-        <br>
+    </div>
 
-        <div>
-            <label for="senha">Senha</label>
+</section>
 
-            <br>
-
-            <input
-                type="password"
-                id="senha"
-                name="senha"
-                placeholder="Digite sua senha"
-                autocomplete="current-password"
-                required
-            >
-        </div>
-
-        <br>
-
-        <button type="submit">
-            Entrar
-        </button>
-
-    </form>
-
-    <br>
-
-    <p>
-        Ainda não possui uma conta?
-
-        <a href="/cadastro">
-            Cadastre-se
-        </a>
-    </p>
-
-</body>
-
-</html>
+{% endblock %}
