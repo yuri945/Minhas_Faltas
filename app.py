@@ -16,6 +16,8 @@ from routes.faltas import faltas
 
 from extensions import csrf, migrate
 
+from errors import registrar_erros  
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -27,6 +29,8 @@ migrate.init_app(app, db)
 app.register_blueprint(auth)
 app.register_blueprint(disciplinas)
 app.register_blueprint(faltas)
+
+registrar_erros(app)
 
 
 @app.route("/")
