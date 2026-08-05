@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Nova disciplina</title>
+</head>
+
+<body>
+
+    <h1>Cadastrar disciplina</h1>
+
+    <form method="POST">
+
+        <label>Nome da disciplina</label><br>
+        <input type="text" name="nome" required><br><br>
+
+        <label>Professor</label><br>
+        <input type="text" name="professor"><br><br>
+
+        <label>Dias da semana</label><br>
+        <input
+            type="text"
+            name="dias_semana"
+            placeholder="Ex.: Segunda e quarta"
+            required
+        ><br><br>
+
+        <label>Limite de faltas</label><br>
+        <input
+            type="number"
+            name="limite_faltas"
+            min="1"
+            required
+        ><br><br>
+
+        <button type="submit">
+            Cadastrar disciplina
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="/dashboard">Voltar</a>
+
+</body>
+
+</html>
