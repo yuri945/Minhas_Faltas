@@ -17,6 +17,16 @@
 
 <body>
 
+    {% with mensagens = get_flashed_messages(with_categories=true) %}
+        {% if mensagens %}
+            {% for categoria, mensagem in mensagens %}
+                <p class="{{ categoria }}">
+                    {{ mensagem }}
+                </p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <h1>Bem-vindo, {{ usuario_nome }}!</h1>
 
     <nav>
@@ -26,9 +36,15 @@
 
         <span> | </span>
 
+        <a href="/alterar-senha">
+            Alterar senha
+        </a>
+        
         <a href="/logout">
             Sair
         </a>
+
+ 
     </nav>
 
     <hr>

@@ -13,6 +13,16 @@
 
 <body>
 
+     {% with mensagens = get_flashed_messages(with_categories=true) %}
+        {% if mensagens %}
+            {% for categoria, mensagem in mensagens %}
+                <p class="{{ categoria }}">
+                    {{ mensagem }}
+                </p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <h1>Editar disciplina</h1>
 
     <form method="POST">

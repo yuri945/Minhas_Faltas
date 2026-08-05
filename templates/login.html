@@ -1,28 +1,82 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Login</title>
 </head>
 
 <body>
 
-    <h1>Login</h1>
+    {% with mensagens = get_flashed_messages(with_categories=true) %}
+        {% if mensagens %}
+            {% for categoria, mensagem in mensagens %}
+                <p class="{{ categoria }}">
+                    {{ mensagem }}
+                </p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
-    <form method="POST">
+    <h1>Entrar</h1>
 
-        <label>Email</label><br>
-        <input type="email" name="email"><br><br>
+    <form method="POST" action="/login">
 
-        <label>Senha</label><br>
-        <input type="password" name="senha"><br><br>
+        <div>
+            <label for="email">E-mail</label>
+
+            <br>
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Digite seu e-mail"
+                maxlength="120"
+                autocomplete="email"
+                required
+            >
+        </div>
+
+        <br>
+
+        <div>
+            <label for="senha">Senha</label>
+
+            <br>
+
+            <input
+                type="password"
+                id="senha"
+                name="senha"
+                placeholder="Digite sua senha"
+                autocomplete="current-password"
+                required
+            >
+        </div>
+
+        <br>
 
         <button type="submit">
             Entrar
         </button>
 
     </form>
+
+    <br>
+
+    <p>
+        Ainda não possui uma conta?
+
+        <a href="/cadastro">
+            Cadastre-se
+        </a>
+    </p>
 
 </body>
 
