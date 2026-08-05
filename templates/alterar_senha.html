@@ -3,12 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Cadastro</title>
+    <title>Alterar senha</title>
 </head>
 
 <body>
@@ -23,57 +24,58 @@
         {% endif %}
     {% endwith %}
 
-    <h1>Criar conta</h1>
+    <h1>Alterar senha</h1>
 
-    <form method="POST" action="/cadastro">
-
-        <div>
-            <label for="nome">Nome</label>
-
-            <br>
-
-            <input
-                type="text"
-                id="nome"
-                name="nome"
-                placeholder="Digite seu nome"
-                minlength="2"
-                maxlength="100"
-                autocomplete="name"
-                required
-            >
-        </div>
-
-        <br>
+    <form method="POST" action="/alterar-senha">
 
         <div>
-            <label for="email">E-mail</label>
-
-            <br>
-
-            <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Digite seu e-mail"
-                maxlength="120"
-                autocomplete="email"
-                required
-            >
-        </div>
-
-        <br>
-
-        <div>
-            <label for="senha">Senha</label>
+            <label for="senha_atual">
+                Senha atual
+            </label>
 
             <br>
 
             <input
                 type="password"
-                id="senha"
-                name="senha"
-                placeholder="Use pelo menos 6 caracteres"
+                id="senha_atual"
+                name="senha_atual"
+                autocomplete="current-password"
+                required
+            >
+        </div>
+
+        <br>
+
+        <div>
+            <label for="nova_senha">
+                Nova senha
+            </label>
+
+            <br>
+
+            <input
+                type="password"
+                id="nova_senha"
+                name="nova_senha"
+                minlength="6"
+                autocomplete="new-password"
+                required
+            >
+        </div>
+
+        <br>
+
+        <div>
+            <label for="confirmar_senha">
+                Confirmar nova senha
+            </label>
+
+            <br>
+
+            <input
+                type="password"
+                id="confirmar_senha"
+                name="confirmar_senha"
                 minlength="6"
                 autocomplete="new-password"
                 required
@@ -83,20 +85,16 @@
         <br>
 
         <button type="submit">
-            Cadastrar
+            Alterar senha
         </button>
 
     </form>
 
     <br>
 
-    <p>
-        Já possui uma conta?
-
-        <a href="/login">
-            Entrar
-        </a>
-    </p>
+    <a href="/dashboard">
+        Voltar
+    </a>
 
 </body>
 
