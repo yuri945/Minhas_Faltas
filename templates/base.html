@@ -3,7 +3,6 @@
 
 <head>
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -20,8 +19,7 @@
         href="{{ url_for('static', filename='css/style.css') }}"
     >
 
-    {% block head %}
-    {% endblock %}
+    {% block head %}{% endblock %}
 </head>
 
 <body>
@@ -30,55 +28,39 @@
 
         <header class="cabecalho-principal">
 
-            <nav class="menu-principal">
+            <nav class="menu-principal" aria-label="Navegação principal">
 
-               <a
-                    class="marca"
-                        href="{{ url_for('home') }}"
-                >
+                <a class="marca" href="/dashboard">
                     <img
                         class="logo-principal"
-                        src="{{ url_for('static', filename='assets/logo_minhasfaltas.svg') }}"
+                        src="{{ url_for('static', filename='assets/logo_minhasfaltas.png') }}"
                         alt="Logo Minhas Faltas"
                     >
                 </a>
 
-                <div class="menu-links">
+                {% if session.get("usuario_id") %}
 
-                    {% if session.get("usuario_id") %}
+                    <div class="menu-links">
 
-                        <a href="{{ url_for('dashboard') }}">
+                        <a href="/dashboard">
                             Dashboard
                         </a>
 
-                        <a href="{{ url_for('disciplinas.nova_disciplina') }}">
+                        <a href="/disciplinas/nova">
                             Nova disciplina
                         </a>
 
-                        <a href="{{ url_for('auth.alterar_senha') }}">
+                        <a href="/alterar-senha">
                             Alterar senha
                         </a>
 
-                        <a
-                            class="link-sair"
-                            href="{{ url_for('auth.logout') }}"
-                        >
+                        <a class="link-sair" href="/logout">
                             Sair
                         </a>
 
-                    {% else %}
+                    </div>
 
-                        <a href="{{ url_for('auth.login') }}">
-                            Entrar
-                        </a>
-
-                        <a href="{{ url_for('auth.cadastro') }}">
-                            Criar conta
-                        </a>
-
-                    {% endif %}
-
-                </div>
+                {% endif %}
 
             </nav>
 
@@ -86,13 +68,13 @@
 
     {% endblock %}
 
-    <main>
+    <main class="area-principal">
 
         {% with mensagens = get_flashed_messages(with_categories=true) %}
 
             {% if mensagens %}
 
-                <section class="mensagens">
+                <section class="mensagens" aria-live="polite">
 
                     {% for categoria, mensagem in mensagens %}
 
@@ -108,25 +90,19 @@
 
         {% endwith %}
 
-        {% block conteudo %}
-        {% endblock %}
+        {% block conteudo %}{% endblock %}
 
     </main>
 
     {% block rodape %}
 
         <footer class="rodape-principal">
-
-            <p>
-                Minhas Faltas — Sistema de controle de frequência
-            </p>
-
+            <p>Minhas Faltas — Sistema de controle de frequência</p>
         </footer>
 
     {% endblock %}
 
-    {% block scripts %}
-    {% endblock %}
+    {% block scripts %}{% endblock %}
 
 </body>
 
