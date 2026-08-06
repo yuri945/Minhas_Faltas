@@ -1,51 +1,256 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Histórico de faltas</title>
-</head>
+{% block titulo %}
+    Histórico de faltas
+{% endblock %}
 
-<body>
+{% block conteudo %}
 
-    <h1>Histórico de faltas</h1>
+<section class="pagina-interna pagina-historico">
 
-    <h2>{{ disciplina.nome }}</h2>
+    <div class="container-pagina">
 
-    <p>
-        Total:
-        {{ total_faltas }}/{{ disciplina.limite_faltas }}
-    </p>
+        <div class="breadcrumb">
 
-    <hr>
+            <a href="/dashboard">
+                Dashboard
+            </a>
 
-    {% if registros %}
+            <span>/</span>
 
-        {% for falta in registros %}
+            <strong>
+                Histórico de faltas
+            </strong>
+
+        </div>
+
+        <header class="cabecalho-pagina cabecalho-historico">
 
             <div>
-                <p>
-                    Data:
-                    {{ falta.data.strftime("%d/%m/%Y") }}
-                </p>
+
+                <h1>
+                    Histórico de faltas
+                </h1>
 
                 <p>
-                    Quantidade: {{ falta.quantidade }}
+                    Consulte os registros e visualize no calendário
+                    os dias em que você faltou.
                 </p>
+
             </div>
 
-            <hr>
+            <a
+                class="botao-secundario"
+                href="/dashboard"
+            >
+                Voltar para a dashboard
+            </a>
 
-        {% endfor %}
+        </header>
 
-    {% else %}
+        <section class="resumo-historico">
 
-        <p>Nenhuma falta registrada nesta disciplina.</p>
+            <article class="cartao-resumo">
 
-    {% endif %}
+                <span>
+                    Disciplina
+                </span>
 
-    <a href="/dashboard">Voltar para a dashboard</a>
+                <strong>
+                    {{ disciplina.nome }}
+                </strong>
 
-</body>
+            </article>
 
-</html>
+            <article class="cartao-resumo">
+
+                <span>
+                    Total de faltas
+                </span>
+
+                <strong>
+                    {{ total_faltas }}
+                </strong>
+
+            </article>
+
+            <article class="cartao-resumo">
+
+                <span>
+                    Limite de faltas
+                </span>
+
+                <strong>
+                    {{ disciplina.limite_faltas }}
+                </strong>
+
+            </article>
+
+        </section>
+
+        <div class="grade-historico">
+
+            <section
+                class="painel-calendario"
+                aria-labelledby="titulo-calendario"
+            >
+
+                <header class="cabecalho-calendario">
+
+                    <button
+                        class="botao-mes"
+                        id="mes-anterior"
+                        type="button"
+                        aria-label="Mostrar mês anterior"
+                    >
+                        ‹
+                    </button>
+
+                    <h2 id="titulo-calendario">
+                        Calendário
+                    </h2>
+
+                    <button
+                        class="botao-mes"
+                        id="proximo-mes"
+                        type="button"
+                        aria-label="Mostrar próximo mês"
+                    >
+                        ›
+                    </button>
+
+                </header>
+
+                <div
+                    class="dias-semana-calendario"
+                    aria-hidden="true"
+                >
+                    <span>Dom</span>
+                    <span>Seg</span>
+                    <span>Ter</span>
+                    <span>Qua</span>
+                    <span>Qui</span>
+                    <span>Sex</span>
+                    <span>Sáb</span>
+                </div>
+
+                <div
+                    class="grade-calendario"
+                    id="grade-calendario"
+                    aria-live="polite"
+                ></div>
+
+                <div class="legenda-calendario">
+
+                    <span class="marcador-falta"></span>
+
+                    <span>
+                        Dia com falta registrada
+                    </span>
+
+                </div>
+
+            </section>
+
+            <section class="painel-registros">
+
+                <header class="cabecalho-lista-registros">
+
+                    <h2>
+                        Registros
+                    </h2>
+
+                    <span>
+                        {{ registros|length }} registro(s)
+                    </span>
+
+                </header>
+
+                {% if registros %}
+
+                    <div class="lista-registros">
+
+                        {% for falta in registros %}
+
+                            <article class="registro-falta">
+
+                                <div class="data-registro">
+
+                                    <span>
+                                        {{ falta.data.strftime("%d") }}
+                                    </span>
+
+                                    <small>
+                                        {{ falta.data.strftime("/%m/%Y") }}
+                                    </small>
+
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Falta registrada
+                                    </strong>
+
+                                    <p>
+                                        Quantidade:
+                                        {{ falta.quantidade }}
+                                    </p>
+
+                                </div>
+
+                            </article>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% else %}
+
+                    <div class="estado-vazio estado-vazio-compacto">
+
+                        <h3>
+                            Nenhuma falta registrada
+                        </h3>
+
+                        <p>
+                            Os dias com falta aparecerão em vermelho
+                            no calendário.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    id="dados-faltas"
+    type="application/json"
+>
+[
+    {% for falta in registros %}
+        {
+            "data": "{{ falta.data.strftime('%Y-%m-%d') }}",
+            "quantidade": {{ falta.quantidade|int }}
+        }{% if not loop.last %},{% endif %}
+    {% endfor %}
+]
+</script>
+
+<script
+    src="{{ url_for('static', filename='js/historico_faltas.js') }}"
+></script>
+
+{% endblock %}

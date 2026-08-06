@@ -1,107 +1,90 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
+{% block titulo %}
+    Alterar senha
+{% endblock %}
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+{% block conteudo %}
 
-    <title>Alterar senha</title>
-</head>
+<section class="pagina-interna pagina-alterar-senha">
 
-<body>
+    <div class="container-pagina conteudo-formulario conteudo-formulario-estreito">
 
-    {% with mensagens = get_flashed_messages(with_categories=true) %}
-        {% if mensagens %}
-            {% for categoria, mensagem in mensagens %}
-                <p class="{{ categoria }}">
-                    {{ mensagem }}
-                </p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+        <div class="breadcrumb">
+            <a href="/dashboard">Dashboard</a>
+            <span>/</span>
+            <strong>Alterar senha</strong>
+        </div>
 
-    <h1>Alterar senha</h1>
+        <header class="cabecalho-pagina">
+            <h1>Alterar senha</h1>
+            <p>
+                Informe sua senha atual e escolha uma nova senha com pelo menos seis caracteres.
+            </p>
+        </header>
 
-    <form method="POST" action="/alterar-senha">
-
-        <input
-            type="hidden"
-            name="csrf_token"
-            value="{{ csrf_token() }}"
+        <form
+            class="formulario-padrao"
+            method="POST"
+            action="/alterar-senha"
         >
 
-        <div>
-            <label for="senha_atual">
-                Senha atual
-            </label>
-
-            <br>
-
             <input
-                type="password"
-                id="senha_atual"
-                name="senha_atual"
-                autocomplete="current-password"
-                required
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
             >
-        </div>
 
-        <br>
+            <div class="campo-padrao">
+                <label for="senha_atual">Senha atual</label>
+                <input
+                    type="password"
+                    id="senha_atual"
+                    name="senha_atual"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
 
-        <div>
-            <label for="nova_senha">
-                Nova senha
-            </label>
+            <div class="campo-padrao">
+                <label for="nova_senha">Nova senha</label>
+                <input
+                    type="password"
+                    id="nova_senha"
+                    name="nova_senha"
+                    minlength="6"
+                    autocomplete="new-password"
+                    required
+                >
+                <small>Use pelo menos seis caracteres.</small>
+            </div>
 
-            <br>
+            <div class="campo-padrao">
+                <label for="confirmar_senha">Confirmar nova senha</label>
+                <input
+                    type="password"
+                    id="confirmar_senha"
+                    name="confirmar_senha"
+                    minlength="6"
+                    autocomplete="new-password"
+                    required
+                >
+            </div>
 
-            <input
-                type="password"
-                id="nova_senha"
-                name="nova_senha"
-                minlength="6"
-                autocomplete="new-password"
-                required
-            >
-        </div>
+            <div class="acoes-formulario">
+                <button class="botao-primario" type="submit">
+                    Alterar senha
+                </button>
 
-        <br>
+                <a class="botao-secundario" href="/dashboard">
+                    Cancelar
+                </a>
+            </div>
 
-        <div>
-            <label for="confirmar_senha">
-                Confirmar nova senha
-            </label>
+        </form>
 
-            <br>
+    </div>
 
-            <input
-                type="password"
-                id="confirmar_senha"
-                name="confirmar_senha"
-                minlength="6"
-                autocomplete="new-password"
-                required
-            >
-        </div>
+</section>
 
-        <br>
-
-        <button type="submit">
-            Alterar senha
-        </button>
-
-    </form>
-
-    <br>
-
-    <a href="/dashboard">
-        Voltar
-    </a>
-
-</body>
-
-</html>
+{% endblock %}

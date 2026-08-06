@@ -1,177 +1,193 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
+{% block titulo %}
+    Dashboard
+{% endblock %}
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+{% block conteudo %}
 
-    <title>Dashboard</title>
-</head>
+<section class="pagina-interna pagina-dashboard">
 
-<body>
+    <div class="container-pagina">
 
-    {% with mensagens = get_flashed_messages(with_categories=true) %}
-        {% if mensagens %}
-            {% for categoria, mensagem in mensagens %}
-                <p class="{{ categoria }}">
-                    {{ mensagem }}
-                </p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+        <div class="breadcrumb">
+            <strong>Dashboard</strong>
+        </div>
 
-    <h1>Bem-vindo, {{ usuario_nome }}!</h1>
-
-    <nav>
-        <a href="/disciplinas/nova">
-            Cadastrar disciplina
-        </a>
-
-        <span> | </span>
-
-        <a href="/alterar-senha">
-            Alterar senha
-        </a>
-
-        <span> | </span>
-
-        <a href="/logout">
-            Sair
-        </a>
-    </nav>
-
-    <hr>
-
-    {% if disciplinas %}
-
-        {% for item in disciplinas %}
+        <header class="cabecalho-pagina cabecalho-dashboard">
 
             <div>
-
-                <h2>
-                    {{ item.disciplina.nome }}
-                </h2>
-
+                <h1>Bem-vindo, {{ usuario_nome }}!</h1>
                 <p>
-                    Professor:
-                    {{ item.disciplina.professor or "Não informado" }}
+                    Acompanhe suas disciplinas, registre faltas e confira quanto ainda falta para atingir o limite.
                 </p>
-
-                <p>
-                    Dias:
-                    {{ item.disciplina.dias_semana }}
-                </p>
-
-                <p>
-                    Faltas:
-                    {{ item.total_faltas }}/{{ item.disciplina.limite_faltas }}
-                </p>
-
-                <p>
-                    Percentual do limite:
-                    {{ item.percentual }}%
-                </p>
-
-                <p>
-                    Situação:
-                    <strong>
-                        {{ item.status }}
-                    </strong>
-                </p>
-
-                <progress
-                    value="{{ item.percentual if item.percentual <= 100 else 100 }}"
-                    max="100"
-                >
-                    {{ item.percentual }}%
-                </progress>
-
-                <br><br>
-
-                <form
-                    method="POST"
-                    action="/disciplinas/{{ item.disciplina.id }}/faltas/adicionar"
-                >
-                    <input
-                        type="hidden"
-                        name="csrf_token"
-                        value="{{ csrf_token() }}"
-                    >
-
-                    <button type="submit">
-                        Adicionar falta
-                    </button>
-                </form>
-
-                <br>
-
-                <form
-                    method="POST"
-                    action="/disciplinas/{{ item.disciplina.id }}/faltas/remover"
-                >
-                    <input
-                        type="hidden"
-                        name="csrf_token"
-                        value="{{ csrf_token() }}"
-                    >
-
-                    <button type="submit">
-                        Remover última falta
-                    </button>
-                </form>
-
-                <br>
-
-                <a href="/disciplinas/{{ item.disciplina.id }}/faltas">
-                    Ver histórico
-                </a>
-
-                <br><br>
-
-                <a href="/disciplinas/{{ item.disciplina.id }}/editar">
-                    Editar disciplina
-                </a>
-
-                <br><br>
-
-                <form
-                    method="POST"
-                    action="/disciplinas/{{ item.disciplina.id }}/excluir"
-                    onsubmit="return confirm('Deseja realmente excluir esta disciplina e todas as suas faltas?')"
-                >
-                    <input
-                        type="hidden"
-                        name="csrf_token"
-                        value="{{ csrf_token() }}"
-                    >
-
-                    <button type="submit">
-                        Excluir disciplina
-                    </button>
-                </form>
-
             </div>
 
-            <hr>
+            <a class="botao-primario" href="/disciplinas/nova">
+                Nova disciplina
+            </a>
 
-        {% endfor %}
+        </header>
 
-    {% else %}
+        {% if disciplinas %}
 
-        <p>
-            Nenhuma disciplina cadastrada.
-        </p>
+            <section class="resumo-dashboard" aria-label="Resumo das disciplinas">
 
-        <a href="/disciplinas/nova">
-            Cadastre sua primeira disciplina
-        </a>
+                <article class="cartao-resumo">
+                    <span>Disciplinas cadastradas</span>
+                    <strong>{{ disciplinas|length }}</strong>
+                </article>
 
-    {% endif %}
+            </section>
 
-</body>
+            <section class="grade-disciplinas">
 
-</html>
+                {% for item in disciplinas %}
+
+                    <article class="cartao-disciplina">
+
+                        <header class="topo-cartao-disciplina">
+
+                            <div>
+                                <h2>{{ item.disciplina.nome }}</h2>
+                                <p>
+                                    {{ item.disciplina.professor or "Professor não informado" }}
+                                </p>
+                            </div>
+
+                            <span class="selo-status">
+                                {{ item.status }}
+                            </span>
+
+                        </header>
+
+                        <dl class="informacoes-disciplina">
+
+                            <div>
+                                <dt>Dias</dt>
+                                <dd>{{ item.disciplina.dias_semana }}</dd>
+                            </div>
+
+                            <div>
+                                <dt>Faltas</dt>
+                                <dd>
+                                    {{ item.total_faltas }}/{{ item.disciplina.limite_faltas }}
+                                </dd>
+                            </div>
+
+                            <div>
+                                <dt>Percentual do limite</dt>
+                                <dd>{{ item.percentual }}%</dd>
+                            </div>
+
+                        </dl>
+
+                        <div class="area-progresso">
+
+                            <div class="texto-progresso">
+                                <span>Uso do limite</span>
+                                <strong>{{ item.percentual }}%</strong>
+                            </div>
+
+                            <div
+                                class="barra-progresso"
+                                role="progressbar"
+                                aria-label="Percentual do limite de faltas"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                                aria-valuenow="{{ item.percentual if item.percentual <= 100 else 100 }}"
+                            >
+                                <span
+                                    style="--percentual: {{ item.percentual if item.percentual <= 100 else 100 }}%;"
+                                ></span>
+                            </div>
+
+                        </div>
+
+                        <div class="acoes-faltas">
+
+                            <form
+                                method="POST"
+                                action="/disciplinas/{{ item.disciplina.id }}/faltas/adicionar"
+                            >
+                                <input
+                                    type="hidden"
+                                    name="csrf_token"
+                                    value="{{ csrf_token() }}"
+                                >
+
+                                <button class="botao-primario" type="submit">
+                                    Adicionar falta
+                                </button>
+                            </form>
+
+                            <form
+                                method="POST"
+                                action="/disciplinas/{{ item.disciplina.id }}/faltas/remover"
+                            >
+                                <input
+                                    type="hidden"
+                                    name="csrf_token"
+                                    value="{{ csrf_token() }}"
+                                >
+
+                                <button class="botao-secundario" type="submit">
+                                    Remover última
+                                </button>
+                            </form>
+
+                        </div>
+
+                        <footer class="rodape-cartao-disciplina">
+
+                            <a href="/disciplinas/{{ item.disciplina.id }}/faltas">
+                                Ver histórico
+                            </a>
+
+                            <a href="/disciplinas/{{ item.disciplina.id }}/editar">
+                                Editar
+                            </a>
+
+                            <form
+                                method="POST"
+                                action="/disciplinas/{{ item.disciplina.id }}/excluir"
+                                onsubmit="return confirm('Deseja realmente excluir esta disciplina e todas as suas faltas?')"
+                            >
+                                <input
+                                    type="hidden"
+                                    name="csrf_token"
+                                    value="{{ csrf_token() }}"
+                                >
+
+                                <button class="botao-link-perigo" type="submit">
+                                    Excluir
+                                </button>
+                            </form>
+
+                        </footer>
+
+                    </article>
+
+                {% endfor %}
+
+            </section>
+
+        {% else %}
+
+            <section class="estado-vazio">
+                <h2>Nenhuma disciplina cadastrada</h2>
+                <p>
+                    Cadastre sua primeira disciplina para começar a controlar suas faltas.
+                </p>
+                <a class="botao-primario" href="/disciplinas/nova">
+                    Cadastrar disciplina
+                </a>
+            </section>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

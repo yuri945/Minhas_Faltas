@@ -1,96 +1,157 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+{% block titulo %}
+    Editar disciplina
+{% endblock %}
 
-    <title>Editar disciplina</title>
-</head>
+{% block conteudo %}
 
-<body>
+<section class="pagina-interna pagina-disciplina">
 
-     {% with mensagens = get_flashed_messages(with_categories=true) %}
-        {% if mensagens %}
-            {% for categoria, mensagem in mensagens %}
-                <p class="{{ categoria }}">
-                    {{ mensagem }}
-                </p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+    <div class="container-pagina conteudo-formulario">
 
-    <h1>Editar disciplina</h1>
+        <div class="breadcrumb">
+            <a href="/dashboard">Dashboard</a>
+            <span>/</span>
+            <strong>Editar disciplina</strong>
+        </div>
 
-    <form method="POST">
+        <header class="cabecalho-pagina">
+            <h1>Editar disciplina</h1>
+            <p>
+                Atualize as informações da disciplina e salve as alterações.
+            </p>
+        </header>
 
-        <input
-            type="hidden"
-            name="csrf_token"
-            value="{{ csrf_token() }}"
-        >
+        <form class="formulario-padrao" method="POST">
 
-        <label for="nome">Nome da disciplina</label><br>
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+            >
 
-        <input
-            type="text"
-            id="nome"
-            name="nome"
-            value="{{ disciplina.nome }}"
-            required
-        >
+            <div class="campo-padrao">
+                <label for="nome">Nome da disciplina</label>
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    value="{{ disciplina.nome }}"
+                    maxlength="100"
+                    required
+                >
+            </div>
 
-        <br><br>
+            <div class="campo-padrao">
+                <label for="professor">Professor</label>
+                <input
+                    type="text"
+                    id="professor"
+                    name="professor"
+                    value="{{ disciplina.professor or '' }}"
+                    maxlength="100"
+                >
+            </div>
 
-        <label for="professor">Professor</label><br>
+            <div class="campo-padrao">
+                <label for="dias_semana">Dias da semana</label>
+                <input
+                    type="text"
+                    id="dias_semana"
+                    name="dias_semana"
+                    value="{{ disciplina.dias_semana }}"
+                    maxlength="100"
+                    required
+                >
+            </div>
 
-        <input
-            type="text"
-            id="professor"
-            name="professor"
-            value="{{ disciplina.professor or '' }}"
-        >
+            <div class="campo-padrao">
 
-        <br><br>
+                <label for="limite_faltas">Limite de faltas</label>
 
-        <label for="dias_semana">Dias da semana</label><br>
+                <div class="controle-numero">
 
-        <input
-            type="text"
-            id="dias_semana"
-            name="dias_semana"
-            value="{{ disciplina.dias_semana }}"
-            required
-        >
+                    <input
+                        type="number"
+                        id="limite_faltas"
+                        name="limite_faltas"
+                        value="{{ disciplina.limite_faltas }}"
+                        min="1"
+                        step="1"
+                        inputmode="numeric"
+                        required
+                    >
 
-        <br><br>
+                    <div class="botoes-numero">
 
-        <label for="limite_faltas">Limite de faltas</label><br>
+                        <button
+                            class="botao-quantidade"
+                            type="button"
+                            data-alteracao="-1"
+                            aria-label="Diminuir limite de faltas"
+                        >
+                            −
+                        </button>
 
-        <input
-            type="number"
-            id="limite_faltas"
-            name="limite_faltas"
-            value="{{ disciplina.limite_faltas }}"
-            min="1"
-            required
-        >
+                        <button
+                            class="botao-quantidade"
+                            type="button"
+                            data-alteracao="1"
+                            aria-label="Aumentar limite de faltas"
+                        >
+                            +
+                        </button>
 
-        <br><br>
+                    </div>
 
-        <button type="submit">
-            Salvar alterações
-        </button>
+                </div>
 
-    </form>
+            </div>
 
-    <br>
+            <div class="acoes-formulario">
+                <button class="botao-primario" type="submit">
+                    Salvar alterações
+                </button>
 
-    <a href="/dashboard">Cancelar</a>
+                <a class="botao-secundario" href="/dashboard">
+                    Cancelar
+                </a>
+            </div>
 
-</body>
+        </form>
 
-</html>
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const campo = document.getElementById("limite_faltas");
+        const botoes = document.querySelectorAll("[data-alteracao]");
+
+        botoes.forEach(function (botao) {
+            botao.addEventListener("click", function () {
+                const alteracao = Number(botao.dataset.alteracao);
+                const minimo = Number(campo.min) || 1;
+                const valorAtual = Number(campo.value) || minimo;
+
+                campo.value = Math.max(minimo, valorAtual + alteracao);
+            });
+        });
+
+        campo.addEventListener("blur", function () {
+            const minimo = Number(campo.min) || 1;
+
+            if (campo.value === "" || Number(campo.value) < minimo) {
+                campo.value = minimo;
+            }
+        });
+    });
+</script>
+
+{% endblock %}
