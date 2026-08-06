@@ -337,6 +337,12 @@ a {
     background-color: var(--cor-fundo);
 }
 
+.conteudo-disciplina {
+    width: 100%;
+    max-width: 800px;
+    margin: 0;
+}
+
 .container-pagina {
     width: 100%;
     max-width: 1180px;
@@ -1064,24 +1070,55 @@ a {
    RESPONSIVIDADE
 ======================================== */
 
-@media (max-width: 980px) {
-    .grade-disciplinas,
+/* ========================================
+   AJUSTES GERAIS DE RESPONSIVIDADE
+======================================== */
+
+body {
+    overflow-x: hidden;
+}
+
+img {
+    max-width: 100%;
+}
+
+.container-pagina,
+.conteudo-disciplina,
+.conteudo-formulario,
+.conteudo-formulario-estreito,
+.cartao-disciplina,
+.painel-calendario,
+.painel-registros {
+    min-width: 0;
+}
+
+/* ========================================
+   TABLETS E NOTEBOOKS MENORES
+======================================== */
+
+@media (max-width: 1100px) {
     .grade-historico {
         grid-template-columns: 1fr;
     }
 
-    .resumo-historico {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+    .grade-disciplinas {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 980px) {
     .menu-principal {
-        padding: 0 20px;
+        padding-right: 20px;
+        padding-left: 20px;
     }
 
     .marca {
-        width: 155px;
+        width: 150px;
+    }
+
+    .logo-principal {
+        width: 130px;
+        height: 38px;
     }
 
     .menu-links {
@@ -1090,7 +1127,7 @@ a {
     }
 
     .menu-links .link-sair {
-        margin-left: 20px;
+        margin-left: 18px;
     }
 
     .pagina-interna,
@@ -1098,59 +1135,127 @@ a {
         padding-right: 20px;
         padding-left: 20px;
     }
+
+    .grade-disciplinas {
+        grid-template-columns: 1fr;
+    }
+
+    .resumo-historico {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
 
+/* ========================================
+   CELULARES E TABLETS
+======================================== */
+
 @media (max-width: 760px) {
+    /*
+       O header passa a ter duas linhas compactas:
+       logo em cima e links em uma barra horizontal.
+    */
+
     .cabecalho-principal {
         height: auto;
+        min-height: 92px;
     }
 
     .menu-principal {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 12px 18px;
+        width: 100%;
+        height: auto;
+        display: grid;
+        grid-template-columns: 1fr;
+        align-items: center;
+        padding: 6px 14px 0;
     }
 
     .marca {
-        width: 150px;
-        height: 55px;
+        width: 130px;
+        height: 44px;
+        display: flex;
+        align-items: center;
     }
 
     .logo-principal {
-        width: 140px;
-        height: 52px;
+        width: 120px;
+        height: 36px;
     }
 
+    /*
+       Os links não ficam mais um embaixo do outro.
+       Eles continuam em uma linha e podem deslizar
+       horizontalmente em telas pequenas.
+    */
+
     .menu-links {
-        width: 100%;
-        height: auto;
-        flex-wrap: wrap;
+        width: calc(100% + 28px);
+        height: 42px;
+        display: flex;
+        align-items: center;
         justify-content: flex-start;
-        gap: 10px 20px;
-        margin-left: 0;
-        padding-bottom: 10px;
+        flex-wrap: nowrap;
+        gap: 0;
+        margin-right: -14px;
+        margin-left: -14px;
+        padding: 0 8px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .menu-links::-webkit-scrollbar {
+        display: none;
     }
 
     .menu-links a {
-        height: auto;
-        padding: 8px 0;
+        height: 42px;
+        flex: 0 0 auto;
+        padding: 0 12px;
+        font-size: 13px;
+        white-space: nowrap;
+        border-bottom-width: 2px;
     }
 
     .menu-links .link-sair {
-        margin-left: auto;
+        margin-left: 0;
     }
+
+    /* Mensagens do Flask abaixo do header */
+
+    .mensagens {
+        top: 104px;
+    }
+
+    /* Páginas internas */
 
     .pagina-interna,
     .pagina-disciplina {
         min-height: auto;
-        padding: 28px 16px 40px;
+        padding: 24px 16px 40px;
+    }
+
+    .container-pagina,
+    .conteudo-disciplina,
+    .conteudo-formulario,
+    .conteudo-formulario-estreito {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .breadcrumb {
+        margin-bottom: 12px;
+        font-size: 13px;
     }
 
     .cabecalho-pagina,
     .cabecalho-dashboard,
     .cabecalho-historico {
-        align-items: flex-start;
+        align-items: stretch;
         flex-direction: column;
+        gap: 18px;
+        padding-bottom: 22px;
     }
 
     .cabecalho-pagina h1,
@@ -1158,18 +1263,113 @@ a {
         font-size: 24px;
     }
 
+    .cabecalho-pagina p,
+    .cabecalho-pagina-disciplina p {
+        font-size: 14px;
+    }
+
+    .cabecalho-pagina > .botao-primario,
+    .cabecalho-pagina > .botao-secundario,
+    .cabecalho-dashboard > .botao-primario,
+    .cabecalho-historico > .botao-secundario {
+        width: 100%;
+    }
+
+    /* Resumos */
+
+    .resumo-dashboard,
     .resumo-historico {
         grid-template-columns: 1fr;
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    .resumo-dashboard {
+        width: 100%;
+    }
+
+    .cartao-resumo {
+        min-height: 86px;
+        padding: 16px;
+    }
+
+    .cartao-resumo strong {
+        font-size: 21px;
+    }
+
+    /* Dashboard */
+
+    .grade-disciplinas {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-top: 20px;
+    }
+
+    .cartao-disciplina {
+        padding: 18px;
+    }
+
+    .topo-cartao-disciplina {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .topo-cartao-disciplina h2 {
+        font-size: 19px;
+    }
+
+    .selo-status {
+        align-self: flex-start;
     }
 
     .informacoes-disciplina {
         grid-template-columns: 1fr;
+        gap: 10px;
+        margin-top: 16px;
+    }
+
+    .acoes-faltas {
+        flex-direction: column;
+    }
+
+    .acoes-faltas form,
+    .acoes-faltas button,
+    .acoes-faltas .botao-primario,
+    .acoes-faltas .botao-secundario {
+        width: 100%;
+    }
+
+    .rodape-cartao-disciplina {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    /* Formulários */
+
+    .formulario-padrao,
+    .form-disciplina {
+        gap: 18px;
+        padding-top: 22px;
+    }
+
+    .linha-formulario {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .campo-padrao input,
+    .campo-disciplina input {
+        min-height: 48px;
+        font-size: 16px;
     }
 
     .acoes-formulario,
     .acoes-disciplina {
         align-items: stretch;
         flex-direction: column;
+        gap: 10px;
     }
 
     .acoes-formulario .botao-primario,
@@ -1178,65 +1378,44 @@ a {
     .acoes-disciplina .botao-cancelar-disciplina {
         width: 100%;
     }
-}
 
-@media (max-width: 600px) {
-    .pagina-autenticacao {
-        align-items: flex-start;
-        padding-top: 24px;
-    }
+    /* Histórico */
 
-    .cartao-autenticacao {
-        padding: 26px 20px;
-        border-radius: 12px;
-    }
-
-    .cabecalho-autenticacao h1 {
-        font-size: 24px;
-    }
-
-    .logo-autenticacao {
-        width: 150px;
-    }
-
-    .logo-autenticacao img {
-        width: 135px;
-    }
-
-    .menu-links {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .menu-links .link-sair {
-        margin-left: 0;
-    }
-
-    .topo-cartao-disciplina,
-    .cabecalho-lista-registros {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .acoes-faltas {
-        flex-direction: column;
-    }
-
-    .acoes-faltas form,
-    .acoes-faltas button {
-        width: 100%;
+    .grade-historico {
+        grid-template-columns: 1fr;
+        gap: 16px;
     }
 
     .painel-calendario,
-    .painel-registros,
-    .cartao-disciplina {
+    .painel-registros {
         padding: 16px;
+    }
+
+    .cabecalho-calendario {
+        grid-template-columns: 38px 1fr 38px;
+        gap: 8px;
+    }
+
+    .cabecalho-calendario h2 {
+        font-size: 18px;
+    }
+
+    .botao-mes {
+        width: 38px;
+        height: 38px;
+        font-size: 25px;
+    }
+
+    .dias-semana-calendario,
+    .grade-calendario {
+        gap: 4px;
     }
 
     .dia-calendario {
         min-height: 46px;
         padding: 6px;
         font-size: 12px;
+        border-radius: 6px;
     }
 
     .dia-com-falta small {
@@ -1246,17 +1425,144 @@ a {
         height: 17px;
         font-size: 9px;
     }
+
+    .registro-falta {
+        align-items: flex-start;
+    }
+
+    /* Rodapé */
+
+    .rodape-principal {
+        padding: 18px 16px;
+        font-size: 12px;
+        line-height: 1.5;
+    }
 }
 
-@media (max-width: 420px) {
+/* ========================================
+   CELULARES PEQUENOS
+======================================== */
+
+@media (max-width: 520px) {
+    .pagina-autenticacao {
+        align-items: flex-start;
+        padding: 20px 12px;
+    }
+
+    .cartao-autenticacao {
+        padding: 24px 18px;
+        border-radius: 12px;
+    }
+
+    .logo-autenticacao {
+        width: 145px;
+        height: 52px;
+    }
+
+    .logo-autenticacao img {
+        width: 130px;
+        height: 48px;
+    }
+
+    .cabecalho-autenticacao h1 {
+        font-size: 23px;
+    }
+
+    .cabecalho-autenticacao p {
+        font-size: 14px;
+    }
+
+    .pagina-interna,
+    .pagina-disciplina {
+        padding: 20px 12px 34px;
+    }
+
+    .cartao-disciplina,
+    .painel-calendario,
+    .painel-registros {
+        padding: 14px;
+        border-radius: 9px;
+    }
+
+    .cartao-resumo {
+        padding: 14px;
+    }
+
+    .estado-vazio {
+        padding: 24px 16px;
+    }
+
+    .texto-progresso {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    /* Calendário compacto */
+
+    .cabecalho-calendario {
+        grid-template-columns: 34px 1fr 34px;
+    }
+
+    .cabecalho-calendario h2 {
+        font-size: 16px;
+    }
+
+    .botao-mes {
+        width: 34px;
+        height: 34px;
+        font-size: 22px;
+    }
+
+    .dias-semana-calendario span {
+        padding: 5px 0;
+        font-size: 9px;
+    }
+
+    .dias-semana-calendario,
+    .grade-calendario {
+        gap: 3px;
+    }
+
+    .dia-calendario {
+        min-height: 38px;
+        padding: 4px;
+        font-size: 11px;
+        border-radius: 5px;
+    }
+
+    .dia-com-falta small {
+        right: 2px;
+        bottom: 2px;
+        min-width: 15px;
+        height: 15px;
+        padding: 0 3px;
+        font-size: 8px;
+    }
+
+    .legenda-calendario {
+        font-size: 11px;
+    }
+
+    .registro-falta {
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .data-registro {
+        min-width: 62px;
+    }
+
+    /* Controle de mais e menos */
+
     .campo-padrao .controle-numero input,
     .campo-disciplina .controle-numero input {
-        padding-right: 72px;
+        padding-right: 70px;
     }
 
     .botoes-numero {
-        right: 6px;
-        gap: 5px;
+        right: 5px;
+        gap: 4px;
     }
 
     .botao-quantidade {
@@ -1264,18 +1570,55 @@ a {
         height: 28px;
         font-size: 18px;
     }
+}
+
+/* ========================================
+   TELAS MUITO PEQUENAS
+======================================== */
+
+@media (max-width: 360px) {
+    .menu-principal {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+    .marca {
+        width: 115px;
+    }
+
+    .logo-principal {
+        width: 108px;
+        height: 34px;
+    }
+
+    .menu-links {
+        width: calc(100% + 20px);
+        margin-right: -10px;
+        margin-left: -10px;
+    }
+
+    .menu-links a {
+        padding-right: 10px;
+        padding-left: 10px;
+        font-size: 12px;
+    }
+
+    .pagina-interna,
+    .pagina-disciplina {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+    .painel-calendario {
+        padding: 10px;
+    }
 
     .dias-semana-calendario span {
-        font-size: 10px;
+        font-size: 8px;
     }
 
     .dia-calendario {
-        min-height: 40px;
-    }
-
-    .rodape-cartao-disciplina {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 12px;
+        min-height: 34px;
+        font-size: 10px;
     }
 }
