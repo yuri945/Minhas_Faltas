@@ -1,65 +1,216 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Nova disciplina</title>
-</head>
+{% block titulo %}
+    Nova disciplina
+{% endblock %}
 
-<body>
+{% block conteudo %}
 
-    {% with mensagens = get_flashed_messages(with_categories=true) %}
-        {% if mensagens %}
-            {% for categoria, mensagem in mensagens %}
-                <p class="{{ categoria }}">
-                    {{ mensagem }}
-                </p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+<section class="pagina-disciplina">
 
-    <h1>Cadastrar disciplina</h1>
+    <div class="conteudo-disciplina">
 
-    <form method="POST">
+        <div class="breadcrumb">
 
-        <input
-            type="hidden"
-            name="csrf_token"
-            value="{{ csrf_token() }}"
+            <a href="{{ url_for('dashboard') }}">
+                Dashboard
+            </a>
+
+            <span>/</span>
+
+            <strong>
+                Nova disciplina
+            </strong>
+
+        </div>
+
+        <header class="cabecalho-pagina-disciplina">
+
+            <h1>
+                Cadastrar disciplina
+            </h1>
+
+            <p>
+                Preencha as informações da disciplina para incluí-la
+                no seu controle de frequência.
+            </p>
+
+        </header>
+
+        <form
+            class="form-disciplina"
+            method="POST"
+            action="{{ url_for('disciplinas.nova_disciplina') }}"
         >
 
-        <label>Nome da disciplina</label><br>
-        <input type="text" name="nome" required><br><br>
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+            >
 
-        <label>Professor</label><br>
-        <input type="text" name="professor"><br><br>
+            <div class="campo-disciplina campo-largura-total">
 
-        <label>Dias da semana</label><br>
-        <input
-            type="text"
-            name="dias_semana"
-            placeholder="Ex.: Segunda e quarta"
-            required
-        ><br><br>
+                <label for="nome">
+                    Nome da disciplina
+                </label>
 
-        <label>Limite de faltas</label><br>
-        <input
-            type="number"
-            name="limite_faltas"
-            min="1"
-            required
-        ><br><br>
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    placeholder="Ex.: Cálculo II"
+                    maxlength="100"
+                    autocomplete="off"
+                    required
+                >
 
-        <button type="submit">
-            Cadastrar disciplina
-        </button>
+            </div>
 
-    </form>
+            <div class="linha-formulario">
 
-    <br>
+                <div class="campo-disciplina">
 
-    <a href="/dashboard">Voltar</a>
+                    <label for="professor">
+                        Professor
+                    </label>
 
-</body>
+                    <input
+                        type="text"
+                        id="professor"
+                        name="professor"
+                        placeholder="Nome do professor"
+                        maxlength="100"
+                        autocomplete="off"
+                    >
 
-</html>
+                </div>
+
+                <div class="campo-disciplina">
+
+                    <label for="limite_faltas">
+                        Limite de faltas
+                    </label>
+
+                    <div class="controle-numero">
+
+                        <input
+                            type="number"
+                            id="limite_faltas"
+                            name="limite_faltas"
+                            value="1"
+                            min="1"
+                            step="1"
+                            inputmode="numeric"
+                            required
+                        >
+
+                        <div class="botoes-numero">
+
+                            <button
+                                class="botao-quantidade"
+                                type="button"
+                                onclick="alterarLimite(-1)"
+                                aria-label="Diminuir limite de faltas"
+                                title="Diminuir"
+                            >
+                                −
+                            </button>
+
+                            <button
+                                class="botao-quantidade"
+                                type="button"
+                                onclick="alterarLimite(1)"
+                                aria-label="Aumentar limite de faltas"
+                                title="Aumentar"
+                            >
+                                +
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="campo-disciplina campo-largura-total">
+
+                <label for="dias_semana">
+                    Dias da semana
+                </label>
+
+                <input
+                    type="text"
+                    id="dias_semana"
+                    name="dias_semana"
+                    placeholder="Ex.: Segunda e quarta"
+                    maxlength="100"
+                    autocomplete="off"
+                    required
+                >
+
+            </div>
+
+            <div class="acoes-disciplina">
+
+                <button
+                    class="botao-cadastrar-disciplina"
+                    type="submit"
+                >
+                    Cadastrar disciplina
+                </button>
+
+                <a
+                    class="botao-cancelar-disciplina"
+                    href="{{ url_for('dashboard') }}"
+                >
+                    Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script>
+    function alterarLimite(alteracao) {
+        const campo = document.getElementById("limite_faltas");
+
+        const minimo = Number(campo.min) || 1;
+        const valorAtual = Number(campo.value) || minimo;
+        const novoValor = valorAtual + alteracao;
+
+        campo.value = Math.max(minimo, novoValor);
+
+        campo.dispatchEvent(
+            new Event("change", { bubbles: true })
+        );
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const campo = document.getElementById("limite_faltas");
+
+        campo.addEventListener("blur", function () {
+            const minimo = Number(campo.min) || 1;
+
+            if (
+                campo.value === "" ||
+                Number(campo.value) < minimo
+            ) {
+                campo.value = minimo;
+            }
+        });
+    });
+</script>
+
+{% endblock %}

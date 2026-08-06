@@ -32,11 +32,15 @@
 
             <nav class="menu-principal">
 
-                <a
+               <a
                     class="marca"
-                    href="{{ url_for('home') }}"
+                        href="{{ url_for('home') }}"
                 >
-                    Minhas Faltas
+                    <img
+                        class="logo-principal"
+                        src="{{ url_for('static', filename='assets/logo_minhasfaltas.svg') }}"
+                        alt="Logo Minhas Faltas"
+                    >
                 </a>
 
                 <div class="menu-links">
@@ -55,7 +59,10 @@
                             Alterar senha
                         </a>
 
-                        <a href="{{ url_for('auth.logout') }}">
+                        <a
+                            class="link-sair"
+                            href="{{ url_for('auth.logout') }}"
+                        >
                             Sair
                         </a>
 
@@ -111,7 +118,7 @@
         <footer class="rodape-principal">
 
             <p>
-                Minhas Faltas
+                Minhas Faltas — Sistema de controle de frequência
             </p>
 
         </footer>
