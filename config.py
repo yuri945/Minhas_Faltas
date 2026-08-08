@@ -1,9 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-
 load_dotenv()
-
 
 BASE_DIR = os.path.abspath(
     os.path.dirname(__file__)
@@ -12,20 +10,14 @@ BASE_DIR = os.path.abspath(
 
 class Config:
 
-    SECRET_KEY = os.getenv(
-        "SECRET_KEY"
-    )
+    SECRET_KEY = os.getenv("SECRET_KEY")
 
-    DATABASE_URL = os.getenv(
-        "DATABASE_URL"
-    )
+    DATABASE_URL = os.getenv("DATABASE_URL")
 
     if DATABASE_URL:
-
         SQLALCHEMY_DATABASE_URI = DATABASE_URL
 
     else:
-
         DATABASE_NAME = os.getenv(
             "DATABASE_NAME",
             "banco.db"
