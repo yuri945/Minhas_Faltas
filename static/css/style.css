@@ -835,19 +835,22 @@ a {
     margin-top: 28px;
     padding: 34px;
     text-align: center;
-    background-color: #ffffff;
+    background-color: var(--cor-escura);
     border: 1px solid #e2d4bd;
     border-radius: 12px;
+    color: #ffffff;
 }
 
 .estado-vazio h2,
-.estado-vazio h3 {
+.estado-vazio h3 { 
+    color: #ffffff;
     margin-bottom: 10px;
 }
 
 .estado-vazio p {
+    
     margin-bottom: 20px;
-    color: var(--cor-texto-secundario);
+    color: #fcebdb;
     line-height: 1.5;
 }
 
@@ -1244,10 +1247,6 @@ img {
         max-width: 100%;
     }
 
-    .breadcrumb {
-        margin-bottom: 12px;
-        font-size: 13px;
-    }
 
     .cabecalho-pagina,
     .cabecalho-dashboard,
