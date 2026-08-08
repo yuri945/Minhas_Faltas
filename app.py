@@ -4,7 +4,6 @@ from sqlalchemy import func
 from config import Config
 from database import db
 from decorators import login_required
-from extensions import csrf
 
 from models.usuario import Usuario
 from models.disciplina import Disciplina
