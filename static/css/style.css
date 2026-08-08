@@ -1555,7 +1555,8 @@ img {
     }
 
     .cartao-autenticacao {
-        padding: 24px 18px;
+        margin-top: 45px;
+        padding: 50px 20px;
         border-radius: 12px;
     }
 
