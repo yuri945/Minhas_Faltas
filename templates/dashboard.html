@@ -11,6 +11,7 @@
     <div class="container-pagina">
 
 
+
         <header class="cabecalho-pagina cabecalho-dashboard">
 
             <div>
@@ -52,8 +53,22 @@
                                 </p>
                             </div>
 
-                            <span class="selo-status">
-                                {{ item.status }}
+                            {% if item.percentual < 50 %}
+                                {% set classe_status = "status-verde" %}
+                                {% set texto_status = "Situação tranquila" %}
+
+                            {% elif item.percentual < 100 %}
+                                {% set classe_status = "status-laranja" %}
+                                {% set texto_status = "Cuidado com as faltas rapaz !" %}
+
+                            {% else %}
+                                {% set classe_status = "status-vermelho" %}
+                                {% set texto_status = "Limite atingido, não falte mais !!!" %}
+
+                            {% endif %}
+
+                            <span class="selo-status {{ classe_status }}">
+                                {{ texto_status }}
                             </span>
 
                         </header>
@@ -79,24 +94,45 @@
 
                         </dl>
 
+                        {% set percentual_barra = item.percentual if item.percentual <= 100 else 100 %}
+
+                        {% if item.percentual < 50 %}
+                            {% set classe_barra = "barra-verde" %}
+
+                        {% elif item.percentual < 100 %}
+                            {% set classe_barra = "barra-laranja" %}
+
+                        {% else %}
+                            {% set classe_barra = "barra-vermelha" %}
+                        {% endif %}
+
                         <div class="area-progresso">
 
                             <div class="texto-progresso">
-                                <span>Uso do limite</span>
-                                <strong>{{ item.percentual }}%</strong>
+
+                                <span> Uso do limite </span>
+
+                                <div class="situacao-progresso">
+
+                                    <strong> {{ item.percentual }}%</strong>
+
+                                </div>
+
                             </div>
 
                             <div
-                                class="barra-progresso"
+                                class="barra-progresso {{ classe_barra }}"
                                 role="progressbar"
                                 aria-label="Percentual do limite de faltas"
                                 aria-valuemin="0"
                                 aria-valuemax="100"
-                                aria-valuenow="{{ item.percentual if item.percentual <= 100 else 100 }}"
+                                aria-valuenow="{{ percentual_barra }}"
                             >
+
                                 <span
-                                    style="--percentual: {{ item.percentual if item.percentual <= 100 else 100 }}%;"
+                                    style="--percentual: {{ percentual_barra }}%;"
                                 ></span>
+
                             </div>
 
                         </div>

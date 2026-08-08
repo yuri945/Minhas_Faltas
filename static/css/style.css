@@ -782,24 +782,91 @@ a {
     justify-content: space-between;
     gap: 12px;
     margin-bottom: 8px;
+
     color: #475569;
     font-size: 13px;
 }
 
+.situacao-progresso {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.situacao-progresso small {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* ========================================
+   BARRA DE PROGRESSO
+======================================== */
+
 .barra-progresso {
     width: 100%;
     height: 10px;
+
     overflow: hidden;
+
     background-color: #e7d9c2;
+
     border-radius: 999px;
 }
 
 .barra-progresso span {
     width: var(--percentual);
     height: 100%;
+
     display: block;
-    background-color: var(--cor-laranja);
+
     border-radius: inherit;
+
+    transition:
+        width 0.35s ease,
+        background-color 0.35s ease;
+}
+
+
+/* ========================================
+   SITUAÇÃO VERDE
+   Menos de 50% do limite
+======================================== */
+
+.barra-progresso.barra-verde span {
+    background-color: #22a447;
+}
+
+.situacao-progresso .barra-verde {
+    color: #15803d;
+}
+
+
+/* ========================================
+   SITUAÇÃO LARANJA
+   Entre 50% e 99%
+======================================== */
+
+.barra-progresso.barra-laranja span {
+    background-color: #e58b17;
+}
+
+.situacao-progresso .barra-laranja {
+    color: #b45309;
+}
+
+
+/* ========================================
+   SITUAÇÃO VERMELHA
+   Limite atingido
+======================================== */
+
+.barra-progresso.barra-vermelha span {
+    background-color: #c43d32;
+}
+
+.situacao-progresso .barra-vermelha {
+    color: #b42318;
 }
 
 .acoes-faltas {
@@ -1319,8 +1386,47 @@ img {
     }
 
     .selo-status {
-        align-self: flex-start;
-    }
+    flex-shrink: 0;
+
+    padding: 6px 12px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    border-radius: 999px;
+
+    transition:
+        color 0.3s,
+        background-color 0.3s,
+        border-color 0.3s;
+}
+
+
+/* VERDE */
+
+.selo-status.status-verde {
+    color: #15803d;
+    background-color: #dcfce7;
+    border: 1px solid #86efac;
+}
+
+
+/* LARANJA */
+
+.selo-status.status-laranja {
+    color: #b45309;
+    background-color: #ffedd5;
+    border: 1px solid #fdba74;
+}
+
+
+/* VERMELHO */
+
+.selo-status.status-vermelho {
+    color: #b42318;
+    background-color: #fee2e2;
+    border: 1px solid #fca5a5;
+}
 
     .informacoes-disciplina {
         grid-template-columns: 1fr;
