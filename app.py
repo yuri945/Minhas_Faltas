@@ -1,4 +1,4 @@
-from flask import Flask, session, redirect, render_template
+from flask import Flask, session, redirect, render_template, send_from_directory
 from sqlalchemy import func
 
 from config import Config
@@ -104,7 +104,18 @@ def dashboard():
     )
 
 
+@app.route("/service-worker.js")
+def service_worker():
+    return send_from_directory(
+        app.static_folder,
+        "service-worker.js",
+        mimetype="application/javascript"
+    )
+
+
 if __name__ == "__main__":
     app.run(
         debug=app.config["DEBUG"]
     )
+
+
