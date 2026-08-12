@@ -1728,3 +1728,73 @@ img {
         font-size: 10px;
     }
 }
+
+/* ========================================
+   BOTÃO DE INSTALAÇÃO DO PWA
+======================================== */
+
+.cabecalho-topo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* Por padrão fica escondido.
+   Portanto, não aparece no desktop. */
+.botao-instalar-app {
+    display: none;
+}
+
+
+/* ========================================
+   BOTÃO PWA - MOBILE
+======================================== */
+
+@media (max-width: 768px) {
+
+    .cabecalho-topo {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .botao-instalar-app.disponivel {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        margin-left: auto;
+        padding: 6px 10px;
+
+        color: #ffffff;
+
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 600;
+
+        background-color: transparent;
+
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        border-radius: 7px;
+
+        cursor: pointer;
+
+        white-space: nowrap;
+
+        transition:
+            color 0.2s ease,
+            border-color 0.2s ease,
+            background-color 0.2s ease;
+    }
+
+    .botao-instalar-app.disponivel:hover {
+        color: var(--cor-laranja-clara);
+        border-color: var(--cor-laranja-clara);
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .botao-instalar-app.disponivel:active {
+        transform: scale(0.97);
+    }
+}

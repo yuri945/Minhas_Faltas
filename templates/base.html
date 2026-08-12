@@ -38,13 +38,25 @@
 
             <nav class="menu-principal" aria-label="Navegação principal">
 
-                <a class="marca" href="/dashboard">
-                    <img
-                        class="logo-principal"
-                        src="{{ url_for('static', filename='assets/logo_minhasfaltas.svg') }}"
-                        alt="Logo Minhas Faltas"
+                <div class="cabecalho-topo">
+
+                    <a class="marca" href="/dashboard">
+                        <img
+                            class="logo-principal"
+                            src="{{ url_for('static', filename='assets/logo_minhasfaltas.svg') }}"
+                            alt="Logo Minhas Faltas"
+                        >
+                    </a>
+
+                    <button
+                        id="installApp"
+                        class="botao-instalar-app"
+                        type="button"
                     >
-                </a>
+                        Instalar app
+                    </button>
+
+                </div>
 
                 {% if session.get("usuario_id") %}
 
@@ -123,6 +135,8 @@
             });
         }
 </script>
+
+<script src="{{ url_for('static', filename='js/install-pwa.js') }}"></script>
 
 </body>
 
