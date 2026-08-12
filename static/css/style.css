@@ -1544,6 +1544,14 @@ img {
     }
 }
 
+.mensagem {
+    transition: opacity 0.4s ease;
+}
+
+.mensagem.sumindo {
+    opacity: 0;
+}
+
 /* ========================================
    CELULARES PEQUENOS
 ======================================== */
