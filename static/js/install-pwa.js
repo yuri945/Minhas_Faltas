@@ -2,55 +2,100 @@ let deferredPrompt = null;
 
 const installButton = document.getElementById("installApp");
 
-if (installButton) {
+// Detecta iPhone/iPad/iPod
+const isIOS =
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (
+        navigator.platform === "MacIntel" &&
+        navigator.maxTouchPoints > 1
+    );
 
-    // Chrome/Edge/Android informa que o PWA pode ser instalado
-    window.addEventListener("beforeinstallprompt", (event) => {
+// Detecta se já está aberto como aplicativo
+const isStandalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
 
-        // Impede o navegador de mostrar o prompt automaticamente
-        event.preventDefault();
 
-        // Guarda o evento para usarmos quando o usuário clicar
-        deferredPrompt = event;
+// ========================================
+// IPHONE / IPAD
+// ========================================
 
-        // Libera o botão.
-        // O CSS garante que ele só aparecerá no celular.
-        installButton.classList.add("disponivel");
+if (installButton && isIOS && !isStandalone) {
+
+    installButton.classList.add("disponivel");
+
+    installButton.addEventListener("click", () => {
+
+        alert(
+            "Para instalar o Minhas Faltas no iPhone:\n\n" +
+            "1. Toque no botão Compartilhar do Safari.\n" +
+            "2. Escolha \"Adicionar à Tela de Início\".\n" +
+            "3. Toque em \"Adicionar\"."
+        );
+
     });
 
+}
 
-    // Usuário clicou em "Instalar app"
+
+// ========================================
+// ANDROID / CHROME
+// ========================================
+
+window.addEventListener("beforeinstallprompt", (event) => {
+
+    event.preventDefault();
+
+    deferredPrompt = event;
+
+    if (installButton && !isStandalone) {
+        installButton.classList.add("disponivel");
+    }
+
+});
+
+
+if (installButton) {
+
     installButton.addEventListener("click", async () => {
+
+        // No iPhone este bloco não executa
+        if (isIOS) {
+            return;
+        }
 
         if (!deferredPrompt) {
             return;
         }
 
-        // Abre a instalação nativa do navegador
         deferredPrompt.prompt();
 
-        // Aguarda o usuário aceitar ou cancelar
-        const { outcome } = await deferredPrompt.userChoice;
+        const { outcome } =
+            await deferredPrompt.userChoice;
 
         console.log(
-            `Resultado da instalação do PWA: ${outcome}`
+            `Resultado da instalação: ${outcome}`
         );
 
-        // O evento só pode ser utilizado uma vez
-        deferredPrompt = null;
-
-        // Esconde novamente o botão
-        installButton.classList.remove("disponivel");
-    });
-
-
-    // Executado quando o aplicativo terminar de ser instalado
-    window.addEventListener("appinstalled", () => {
-
         deferredPrompt = null;
 
         installButton.classList.remove("disponivel");
 
-        console.log("Minhas Faltas instalado com sucesso.");
     });
+
 }
+
+
+// ========================================
+// DEPOIS DA INSTALAÇÃO
+// ========================================
+
+window.addEventListener("appinstalled", () => {
+
+    deferredPrompt = null;
+
+    if (installButton) {
+        installButton.classList.remove("disponivel");
+    }
+
+});
