@@ -49,9 +49,7 @@ a {
     flex: 1;
 }
 
-/* ========================================
-   LOGIN E CADASTRO
-======================================== */
+/* LOGIN E CADASTRO */
 
 .pagina-autenticacao {
     min-height: 100vh;
@@ -194,9 +192,7 @@ a {
     text-decoration: underline;
 }
 
-/* ========================================
-   MENSAGENS DO FLASK
-======================================== */
+/* MENSAGENS DO FLASK */
 
 .mensagens {
     position: fixed;
@@ -240,9 +236,7 @@ a {
     border: 1px solid #bfdbfe;
 }
 
-/* ========================================
-   CABEÇALHO
-======================================== */
+/*  CABEÇALHO */
 
 .cabecalho-principal {
     width: 100%;
@@ -311,9 +305,7 @@ a {
     margin-left: 45px;
 }
 
-/* ========================================
-   RODAPÉ
-======================================== */
+/* FOOTER */
 
 .rodape-principal {
     width: 100%;
@@ -326,9 +318,7 @@ a {
     border-top: 2px solid var(--cor-laranja);
 }
 
-/* ========================================
-   ESTRUTURA DAS PÁGINAS INTERNAS
-======================================== */
+/* ESTRUTURA DAS PÁGINAS INTERNAS */
 
 .pagina-interna,
 .pagina-disciplina {
@@ -389,9 +379,7 @@ a {
     border-bottom: 1px solid var(--cor-borda);
 }
 
-/* ========================================
-   BOTÕES E LINKS DE AÇÃO
-======================================== */
+/* BOTÕES E LINKS DE AÇÃO */
 
 .botao-primario,
 .botao-secundario {
@@ -450,9 +438,7 @@ a {
     text-decoration: underline;
 }
 
-/* ========================================
-   FORMULÁRIOS INTERNOS
-======================================== */
+/* FORMULÁRIOS INTERNOS */
 
 .formulario-padrao,
 .form-disciplina {
@@ -777,9 +763,7 @@ a {
 }
 
 
-/* ========================================
-   BARRA DE PROGRESSO
-======================================== */
+/* BARRA DE PROGRESSO */
 
 .barra-progresso {
     width: 100%;
@@ -806,10 +790,8 @@ a {
 }
 
 
-/* ========================================
-   SITUAÇÃO VERDE
-   Menos de 50% do limite
-======================================== */
+/* SITUAÇÃO VERDE
+Menos de 50% do limite */
 
 .barra-progresso.barra-verde span {
     background-color: #22a447;
@@ -820,10 +802,8 @@ a {
 }
 
 
-/* ========================================
-   SITUAÇÃO LARANJA
-   Entre 50% e 99%
-======================================== */
+/* SITUAÇÃO LARANJA
+   Entre 50% e 99% */
 
 .barra-progresso.barra-laranja span {
     background-color: #e58b17;
@@ -834,10 +814,8 @@ a {
 }
 
 
-/* ========================================
-   SITUAÇÃO VERMELHA
-   Limite atingido
-======================================== */
+/* SITUAÇÃO VERMELHA
+   Limite atingido */
 
 .barra-progresso.barra-vermelha span {
     background-color: #c43d32;
@@ -908,9 +886,7 @@ a {
     margin-bottom: 0;
 }
 
-/* ========================================
-   HISTÓRICO E CALENDÁRIO
-======================================== */
+/* HISTÓRICO E CALENDÁRIO */
 
 .cabecalho-historico {
     align-items: center;
@@ -1114,13 +1090,9 @@ a {
     font-size: 14px;
 }
 
-/* ========================================
-   RESPONSIVIDADE
-======================================== */
+/* RESPONSIVIDADE */
 
-/* ========================================
-   AJUSTES GERAIS DE RESPONSIVIDADE
-======================================== */
+/* AJUSTES GERAIS DE RESPONSIVIDADE */
 
 body {
     overflow-x: hidden;
@@ -1140,9 +1112,7 @@ img {
     min-width: 0;
 }
 
-/* ========================================
-   TABLETS E NOTEBOOKS MENORES
-======================================== */
+/* TABLETS E NOTEBOOKS MENORES */
 
 @media (max-width: 1100px) {
     .grade-historico {
@@ -1193,9 +1163,7 @@ img {
     }
 }
 
-/* ========================================
-   CELULARES E TABLETS
-======================================== */
+/* CELULARES E TABLETS */
 
 @media (max-width: 760px) {
     /*
@@ -1530,9 +1498,7 @@ img {
     opacity: 0;
 }
 
-/* ========================================
-   CELULARES PEQUENOS
-======================================== */
+/* CELULARES PEQUENOS  */
 
 @media (max-width: 520px) {
     .pagina-autenticacao {
@@ -1664,9 +1630,7 @@ img {
     }
 }
 
-/* ========================================
-   TELAS MUITO PEQUENAS
-======================================== */
+/* TELAS MUITO PEQUENAS */
 
 @media (max-width: 360px) {
     .menu-principal {
@@ -1715,9 +1679,7 @@ img {
     }
 }
 
-/* ========================================
-   BOTÃO DE INSTALAÇÃO DO PWA
-======================================== */
+/* BOTÃO DE INSTALAÇÃO DO PWA */
 
 .cabecalho-topo {
     display: flex;
@@ -1732,9 +1694,7 @@ img {
 }
 
 
-/* ========================================
-   BOTÃO PWA - MOBILE
-======================================== */
+/* BOTÃO PWA - MOBILE  */
 
 @media (max-width: 768px) {
 
