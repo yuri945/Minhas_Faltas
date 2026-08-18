@@ -2,7 +2,7 @@ let deferredPrompt = null;
 
 const installButton = document.getElementById("installApp");
 
-// Detecta iPhone/iPad/iPod
+
 const isIOS =
     /iPad|iPhone|iPod/.test(navigator.userAgent) ||
     (
@@ -10,15 +10,13 @@ const isIOS =
         navigator.maxTouchPoints > 1
     );
 
-// Detecta se já está aberto como aplicativo
+
 const isStandalone =
     window.matchMedia("(display-mode: standalone)").matches ||
     window.navigator.standalone === true;
 
 
-// ========================================
-// IPHONE / IPAD
-// ========================================
+
 
 if (installButton && isIOS && !isStandalone) {
 
@@ -38,9 +36,7 @@ if (installButton && isIOS && !isStandalone) {
 }
 
 
-// ========================================
-// ANDROID / CHROME
-// ========================================
+
 
 window.addEventListener("beforeinstallprompt", (event) => {
 
@@ -86,9 +82,6 @@ if (installButton) {
 }
 
 
-// ========================================
-// DEPOIS DA INSTALAÇÃO
-// ========================================
 
 window.addEventListener("appinstalled", () => {
 
