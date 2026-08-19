@@ -13,9 +13,10 @@ from routes.auth import auth
 from routes.disciplinas import disciplinas
 from routes.faltas import faltas
 
-from extensions import csrf, migrate
+from extensions import csrf, migrate, limiter
 
 from errors import registrar_erros  
+
 
 
 app = Flask(__name__)
@@ -24,12 +25,11 @@ app.config.from_object(Config)
 db.init_app(app)
 csrf.init_app(app)
 migrate.init_app(app, db)
-
+registrar_erros(app)
+limiter.init_app(app)
 app.register_blueprint(auth)
 app.register_blueprint(disciplinas)
 app.register_blueprint(faltas)
-
-registrar_erros(app)
 
 
 @app.route("/")

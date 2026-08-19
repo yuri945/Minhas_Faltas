@@ -16,6 +16,7 @@ from database import db
 from decorators import login_required
 from models.usuario import Usuario
 from services.database_service import salvar_alteracoes
+from extensions import limiter
 
 
 auth = Blueprint("auth", __name__)
@@ -33,7 +34,10 @@ def cadastro():
         senha = request.form.get("senha", "")
 
         if not nome or not email or not senha:
-            flash("Preencha todos os campos.", "erro")
+            flash(
+                "Preencha todos os campos.",
+                "erro"
+            )
             return redirect("/cadastro")
 
         if len(nome) < 2:
@@ -91,14 +95,22 @@ def cadastro():
 
 
 @auth.route("/login", methods=["GET", "POST"])
+@limiter.limit("5 per minute; 20 per hour")
 def login():
 
     if "usuario_id" in session:
         return redirect("/dashboard")
 
     if request.method == "POST":
-        email = request.form.get("email", "").strip().lower()
-        senha = request.form.get("senha", "")
+        email = request.form.get(
+            "email",
+            ""
+        ).strip().lower()
+
+        senha = request.form.get(
+            "senha",
+            ""
+        )
 
         if not email or not senha:
             flash(
@@ -122,6 +134,7 @@ def login():
             return redirect("/login")
 
         session.clear()
+
         session["usuario_id"] = usuario.id
         session["usuario_nome"] = usuario.nome
 
@@ -135,7 +148,10 @@ def login():
     return render_template("login.html")
 
 
-@auth.route("/alterar-senha", methods=["GET", "POST"])
+@auth.route(
+    "/alterar-senha",
+    methods=["GET", "POST"]
+)
 @login_required
 def alterar_senha():
 
@@ -144,6 +160,7 @@ def alterar_senha():
     )
 
     if request.method == "POST":
+
         senha_atual = request.form.get(
             "senha_atual",
             ""
@@ -159,12 +176,18 @@ def alterar_senha():
             ""
         )
 
-        if not senha_atual or not nova_senha or not confirmar_senha:
+        if (
+            not senha_atual
+            or not nova_senha
+            or not confirmar_senha
+        ):
             flash(
                 "Preencha todos os campos.",
                 "erro"
             )
-            return redirect("/alterar-senha")
+            return redirect(
+                "/alterar-senha"
+            )
 
         if not check_password_hash(
             usuario.senha,
@@ -174,21 +197,27 @@ def alterar_senha():
                 "A senha atual está incorreta.",
                 "erro"
             )
-            return redirect("/alterar-senha")
+            return redirect(
+                "/alterar-senha"
+            )
 
         if len(nova_senha) < 6:
             flash(
                 "A nova senha deve ter pelo menos 6 caracteres.",
                 "erro"
             )
-            return redirect("/alterar-senha")
+            return redirect(
+                "/alterar-senha"
+            )
 
         if nova_senha != confirmar_senha:
             flash(
                 "A confirmação da senha não corresponde.",
                 "erro"
             )
-            return redirect("/alterar-senha")
+            return redirect(
+                "/alterar-senha"
+            )
 
         if check_password_hash(
             usuario.senha,
@@ -198,7 +227,9 @@ def alterar_senha():
                 "A nova senha deve ser diferente da senha atual.",
                 "erro"
             )
-            return redirect("/alterar-senha")
+            return redirect(
+                "/alterar-senha"
+            )
 
         usuario.senha = generate_password_hash(
             nova_senha
@@ -209,7 +240,9 @@ def alterar_senha():
                 "Não foi possível alterar a senha. Tente novamente.",
                 "erro"
             )
-            return redirect("/alterar-senha")
+            return redirect(
+                "/alterar-senha"
+            )
 
         flash(
             "Senha alterada com sucesso.",
@@ -218,7 +251,9 @@ def alterar_senha():
 
         return redirect("/dashboard")
 
-    return render_template("alterar_senha.html")
+    return render_template(
+        "alterar_senha.html"
+    )
 
 
 @auth.route("/logout")
