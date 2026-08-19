@@ -12,3 +12,9 @@ def registrar_erros(app):
     def erro_interno(erro):
         db.session.rollback()
         return render_template("500.html"), 500
+
+    @app.errorhandler(429)
+    def limite_requisicoes(error):
+        return render_template(
+            "429.html"
+        ), 429

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+
+<section class="erro-limite">
+
+    <div class="erro-limite-card">
+
+        <div class="erro-limite-icone">
+            🔒
+        </div>
+
+        <h1>Muitas tentativas</h1>
+
+        <p>
+            Você realizou várias tentativas de acesso
+            em pouco tempo.
+        </p>
+
+        <p>
+            Por segurança, aguarde alguns minutos
+            antes de tentar novamente.
+        </p>
+
+        <a
+            href="/login"
+            class="botao-primario"
+        >
+            Voltar para o login
+        </a>
+
+    </div>
+
+</section>
+
+{% endblock %}

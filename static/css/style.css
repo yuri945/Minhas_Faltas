@@ -1744,3 +1744,54 @@ img {
         transform: scale(0.97);
     }
 }
+
+.erro-limite {
+    min-height: 70vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 30px 20px;
+}
+
+.erro-limite-card {
+    width: 100%;
+    max-width: 500px;
+
+    padding: 40px;
+
+    text-align: center;
+
+    border-radius: 16px;
+
+    background: var(--cor-card, #ffffff);
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.erro-limite-icone {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.erro-limite-card h1 {
+    margin-bottom: 15px;
+}
+
+.erro-limite-card p {
+    margin-bottom: 12px;
+
+    line-height: 1.6;
+
+    color: #666;
+}
+
+.erro-limite-card .botao-primario {
+    display: inline-block;
+
+    margin-top: 20px;
+
+    text-decoration: none;
+}
