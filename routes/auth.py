@@ -60,7 +60,7 @@ def cadastro():
 
         if usuario_existente:
             flash(
-                "Este e-mail já está cadastrado.",
+                "Não foi possível realizar o cadastro com esses dados.",
                 "erro"
             )
             return redirect("/cadastro")
@@ -95,7 +95,7 @@ def cadastro():
 
 
 @auth.route("/login", methods=["GET", "POST"])
-@limiter.limit("5 per minute; 20 per hour")
+@limiter.limit("5 per minute; 20 per hour", methods=["POST"])
 def login():
 
     if "usuario_id" in session:
@@ -256,7 +256,7 @@ def alterar_senha():
     )
 
 
-@auth.route("/logout")
+@auth.route("/logout", methods=["POST"])
 @login_required
 def logout():
 
