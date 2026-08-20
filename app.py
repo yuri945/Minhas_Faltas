@@ -33,8 +33,6 @@ app.register_blueprint(auth)
 app.register_blueprint(disciplinas)
 app.register_blueprint(faltas)
 
-app = Flask(__name__)
-app.config.from_object(Config)
 
 app.wsgi_app = ProxyFix(
     app.wsgi_app,
